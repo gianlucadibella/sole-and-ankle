@@ -36,14 +36,24 @@ const ShoeCard = ({
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
+          {variant === 'on-sale' && <SaleFlag>Sale</SaleFlag>}
+          {variant === 'new-release' && <NewRelease>Just Relesead!</NewRelease>}
         </ImageWrapper>
+        
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
+         
+          <Price style={{
+            '--color': variant === 'on-sale' ? COLORS.gray[700] : undefined,
+            '--text-decoration': variant === 'on-sale' ? 'line-through' : undefined,
+          }}>
+            {formatPrice(price)}
+            </Price>
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          {variant === 'on-sale' && <SalePrice>{formatPrice(salePrice)}</SalePrice>}
         </Row>
       </Wrapper>
     </Link>
@@ -55,16 +65,29 @@ const Link = styled.a`
   color: inherit;
 `;
 
-const Wrapper = styled.article``;
+const Wrapper = styled.article`
+  display: flex;
+  flex-direction: column;
+  min-width: 275px;
+`;
 
 const ImageWrapper = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  border-radius: 16px 16px 4px 4px;
+  width:100%;
+   
+`
 
 const Row = styled.div`
   font-size: 1rem;
+  display:flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -72,7 +95,10 @@ const Name = styled.h3`
   color: ${COLORS.gray[900]};
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+  color: var(--color);
+  text-decoration: var(--text-decoration);
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
@@ -81,6 +107,28 @@ const ColorInfo = styled.p`
 const SalePrice = styled.span`
   font-weight: ${WEIGHTS.medium};
   color: ${COLORS.primary};
+`;
+
+const Flag = styled.div`
+  height: 32px;
+  line-height: 32px;
+  color: white;
+  border-radius: 2px;
+  position: absolute;
+  text-align: center;
+  padding: 0 10px;
+  font-weight: ${WEIGHTS.bold};
+  top: 12px;
+  right: -4px;
+  font-size: ${14 / 16}rem;
+`
+
+const SaleFlag = styled(Flag)`
+  background-color:  ${COLORS.primary};
+`;
+
+const NewRelease = styled(Flag)`
+  background-color: ${COLORS.secondary};
 `;
 
 export default ShoeCard;
